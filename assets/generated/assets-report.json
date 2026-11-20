@@ -1,0 +1,51 @@
+{
+  "files": [
+    {
+      "alpha_mode": "opaque",
+      "bytes": 230452,
+      "file": "husky_sky.atlas",
+      "format": "msa1",
+      "frames": 2,
+      "height": 240,
+      "type": "atlas",
+      "variants": 0,
+      "width": 480
+    },
+    {
+      "alpha_mode": "binary",
+      "bytes": 811284,
+      "file": "husky_large.atlas",
+      "format": "msa1",
+      "frames": 4,
+      "height": 520,
+      "type": "atlas",
+      "variants": 0,
+      "width": 520
+    },
+    {
+      "alpha_mode": "binary",
+      "bytes": 240148,
+      "file": "husky_small.atlas",
+      "format": "msa1",
+      "frames": 8,
+      "height": 200,
+      "type": "atlas",
+      "variants": 0,
+      "width": 400
+    },
+    {
+      "alpha_mode": "binary",
+      "bytes": 121600,
+      "file": "husky_bow.atlas",
+      "format": "msa1",
+      "frames": 5,
+      "height": 90,
+      "type": "atlas",
+      "variants": 0,
+      "width": 450
+    }
+  ],
+  "limit_bytes": 4194304,
+  "schema": "mosaico-assets-report/v1",
+  "total_bytes": 1403484
+}

@@ -1,0 +1,33 @@
+{
+ "image": "husky_small_source.png",
+ "columns": 4,
+ "rows": 2,
+ "output_cell": 100,
+ "alpha_mode": "binary",
+ "frames": [
+  {
+   "name": "lamp_glow"
+  },
+  {
+   "name": "light_pool"
+  },
+  {
+   "name": "shadow_soft"
+  },
+  {
+   "name": "paw_spray"
+  },
+  {
+   "name": "snow_puff"
+  },
+  {
+   "name": "towline"
+  },
+  {
+   "name": "snow_mound_wide"
+  },
+  {
+   "name": "snow_mound_small"
+  }
+ ]
+}

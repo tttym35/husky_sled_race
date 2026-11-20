@@ -1,0 +1,26 @@
+{
+ "schema": "mosaico-game-assets/v1",
+ "limit_bytes": 4194304,
+ "atlases": [
+  {
+   "config": "husky_sky.json",
+   "source": "husky_sky_source.png",
+   "output": "husky_sky.atlas"
+  },
+  {
+   "config": "husky_large.json",
+   "source": "husky_large_source.png",
+   "output": "husky_large.atlas"
+  },
+  {
+   "config": "husky_small.json",
+   "source": "husky_small_source.png",
+   "output": "husky_small.atlas"
+  },
+  {
+   "config": "husky_bow.json",
+   "source": "husky_bow_source.png",
+   "output": "husky_bow.atlas"
+  }
+ ]
+}

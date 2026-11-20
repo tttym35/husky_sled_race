@@ -1,0 +1,883 @@
+{
+ "schema": "husky-asset-library/v1",
+ "screen": 480,
+ "sources": [
+  "joyful_sprint_gameplay_v1.png",
+  "minimal_hud_cutouts_v1.png",
+  "six_huskies_cutout_v1.png",
+  "snow_forest_background_v1.png"
+ ],
+ "font": "Source Han Sans CN (SIL OFL 1.1)",
+ "total_bytes_rgb565": 1492999,
+ "assets": [
+  {
+   "name": "sky_panorama",
+   "group": "env",
+   "file": "env/sky_panorama.png",
+   "width": 480,
+   "height": 233,
+   "alpha": "opaque",
+   "bytes_rgb565": 223680,
+   "reuse": "draw twice: normal + horizontally flipped copy = seamless 960 px loop",
+   "horizon_y": 233
+  },
+  {
+   "name": "snow_ground",
+   "group": "env",
+   "file": "env/snow_ground.png",
+   "width": 128,
+   "height": 128,
+   "alpha": "opaque",
+   "bytes_rgb565": 32768,
+   "reuse": "2x2 mirror tile, wraps both ways; trail spans + deep-snow verge (tint darker)"
+  },
+  {
+   "name": "treeline_birch",
+   "group": "env",
+   "file": "env/treeline_birch.png",
+   "width": 199,
+   "height": 283,
+   "alpha": "smooth",
+   "bytes_rgb565": 168951,
+   "reuse": "roadside billboard; flip for the other side; scale by depth",
+   "pivot": "bottom-centre on the verge"
+  },
+  {
+   "name": "treeline_lamp",
+   "group": "env",
+   "file": "env/treeline_lamp.png",
+   "width": 189,
+   "height": 260,
+   "alpha": "smooth",
+   "bytes_rgb565": 147420,
+   "reuse": "roadside billboard with lamp; flip for the other side; add fx/lamp_glow at the lamp head",
+   "pivot": "bottom-centre on the verge"
+  },
+  {
+   "name": "snow_mound_wide",
+   "group": "env",
+   "file": "env/snow_mound_wide.png",
+   "width": 150,
+   "height": 46,
+   "alpha": "smooth",
+   "bytes_rgb565": 20700,
+   "reuse": "verge prop; flip for variety; scale by depth"
+  },
+  {
+   "name": "snow_mound_small",
+   "group": "env",
+   "file": "env/snow_mound_small.png",
+   "width": 84,
+   "height": 34,
+   "alpha": "smooth",
+   "bytes_rgb565": 8568,
+   "reuse": "verge prop; flip for variety; scale by depth"
+  },
+  {
+   "name": "menu_backdrop",
+   "group": "env",
+   "file": "env/menu_backdrop.png",
+   "width": 160,
+   "height": 160,
+   "alpha": "opaque",
+   "bytes_rgb565": 51200,
+   "reuse": "upscale x3 behind title, pause and result cards (already blurred)"
+  },
+  {
+   "name": "team_run",
+   "group": "team",
+   "file": "team/team_run.png",
+   "width": 257,
+   "height": 253,
+   "alpha": "smooth",
+   "bytes_rgb565": 195063,
+   "reuse": "runtime bob (2-3 px at stride rate), lean = small rotation, heat = faster bob; one bitmap for the whole running state",
+   "anchor_ring": [
+    126,
+    196
+   ]
+  },
+  {
+   "name": "towline",
+   "group": "team",
+   "file": "team/towline.png",
+   "width": 24,
+   "height": 56,
+   "alpha": "smooth",
+   "bytes_rgb565": 4032,
+   "reuse": "shared by every team state; stretch vertically to reach the sled bow",
+   "anchor_top": "centre"
+  },
+  {
+   "name": "team_lookback",
+   "group": "team",
+   "file": "team/team_lookback.png",
+   "width": 257,
+   "height": 178,
+   "alpha": "smooth",
+   "bytes_rgb565": 137238,
+   "reuse": "DRAFT keyed from the gameplay concept (rough leaders, lower camera); replace with prompt team_lookback_v1. Shown ~1 s now and then; align ring anchor with team_run",
+   "anchor_ring": [
+    132,
+    176
+   ]
+  },
+  {
+   "name": "team_stop",
+   "group": "team",
+   "alias_of": "team_run",
+   "bytes_rgb565": 0,
+   "reuse": "placeholder: frozen team_run, no bob. Replace with one standing-team render (prompt team_stop_v1) at the same size and ring anchor"
+  },
+  {
+   "name": "sled_bow",
+   "group": "sled",
+   "file": "sled/sled_bow.png",
+   "width": 411,
+   "height": 80,
+   "alpha": "smooth",
+   "bytes_rgb565": 98640,
+   "reuse": "fixed at the bottom edge; shake 1-2 px with bumps; heat glow drawn on top",
+   "pivot": "bottom-centre"
+  },
+  {
+   "name": "snow_puff",
+   "group": "fx",
+   "file": "fx/snow_puff.png",
+   "width": 40,
+   "height": 40,
+   "alpha": "smooth",
+   "bytes_rgb565": 4800,
+   "reuse": "white: tint at runtime (cold blue in shade, amber near lamps); scale 0.5-2x for kick-up and landing"
+  },
+  {
+   "name": "paw_spray",
+   "group": "fx",
+   "file": "fx/paw_spray.png",
+   "width": 72,
+   "height": 48,
+   "alpha": "smooth",
+   "bytes_rgb565": 10368,
+   "reuse": "white: tint at runtime (cold blue in shade, amber near lamps); emitted under the team at stride rate"
+  },
+  {
+   "name": "snowflake_soft",
+   "group": "fx",
+   "file": "fx/snowflake_soft.png",
+   "width": 10,
+   "height": 10,
+   "alpha": "smooth",
+   "bytes_rgb565": 300,
+   "reuse": "white: tint at runtime (cold blue in shade, amber near lamps)"
+  },
+  {
+   "name": "snow_streak",
+   "group": "fx",
+   "file": "fx/snow_streak.png",
+   "width": 5,
+   "height": 28,
+   "alpha": "smooth",
+   "bytes_rgb565": 420,
+   "reuse": "white: tint at runtime (cold blue in shade, amber near lamps); rotate toward the vanishing point; count and length grow with heat"
+  },
+  {
+   "name": "lamp_glow",
+   "group": "fx",
+   "file": "fx/lamp_glow.png",
+   "width": 72,
+   "height": 72,
+   "alpha": "smooth",
+   "bytes_rgb565": 15552,
+   "reuse": "warm halo on every lamp head; flicker by alpha/scale"
+  },
+  {
+   "name": "light_pool",
+   "group": "fx",
+   "file": "fx/light_pool.png",
+   "width": 120,
+   "height": 36,
+   "alpha": "smooth",
+   "bytes_rgb565": 12960,
+   "reuse": "warm pool on the snow under lamps; scale by depth"
+  },
+  {
+   "name": "shadow_soft",
+   "group": "fx",
+   "file": "fx/shadow_soft.png",
+   "width": 96,
+   "height": 24,
+   "alpha": "smooth",
+   "bytes_rgb565": 6912,
+   "reuse": "under team and props; stretch to fit"
+  },
+  {
+   "name": "frost_corner",
+   "group": "fx",
+   "file": "fx/frost_corner.png",
+   "width": 128,
+   "height": 128,
+   "alpha": "smooth",
+   "bytes_rgb565": 49152,
+   "reuse": "blizzard tier only: draw in 4 corners with flips, alpha follows heat"
+  },
+  {
+   "name": "pill_cap",
+   "group": "ui",
+   "file": "ui/pill_cap.png",
+   "width": 15,
+   "height": 30,
+   "alpha": "smooth",
+   "bytes_rgb565": 1350,
+   "reuse": "left cap; right cap = flipped; middle = ui/pill_mid stretched"
+  },
+  {
+   "name": "pill_mid",
+   "group": "ui",
+   "file": "ui/pill_mid.png",
+   "width": 1,
+   "height": 30,
+   "alpha": "smooth",
+   "bytes_rgb565": 90,
+   "reuse": "stretch horizontally; score, lap, timers, prompts"
+  },
+  {
+   "name": "panel_corner",
+   "group": "ui",
+   "file": "ui/panel_corner.png",
+   "width": 14,
+   "height": 14,
+   "alpha": "smooth",
+   "bytes_rgb565": 588,
+   "reuse": "9-slice corner, flip for the other three"
+  },
+  {
+   "name": "panel_edge",
+   "group": "ui",
+   "file": "ui/panel_edge.png",
+   "width": 1,
+   "height": 14,
+   "alpha": "smooth",
+   "bytes_rgb565": 42,
+   "reuse": "9-slice top edge, stretch; rotate/flip for the other edges"
+  },
+  {
+   "name": "panel_fill",
+   "group": "ui",
+   "file": "ui/panel_fill.png",
+   "width": 8,
+   "height": 8,
+   "alpha": "smooth",
+   "bytes_rgb565": 192,
+   "reuse": "9-slice centre, stretch; minimap, pause, result, mode cards"
+  },
+  {
+   "name": "btn_pause",
+   "group": "ui",
+   "file": "ui/btn_pause.png",
+   "width": 49,
+   "height": 48,
+   "alpha": "smooth",
+   "bytes_rgb565": 7056
+  },
+  {
+   "name": "map_dot",
+   "group": "ui",
+   "file": "ui/map_dot.png",
+   "width": 13,
+   "height": 13,
+   "alpha": "smooth",
+   "bytes_rgb565": 507,
+   "reuse": "minimap position; tint per player"
+  },
+  {
+   "name": "minimap_track",
+   "group": "ui",
+   "file": "ui/minimap_track.png",
+   "width": 64,
+   "height": 64,
+   "alpha": "smooth",
+   "bytes_rgb565": 12288,
+   "reuse": "generated from components/app_game/sled_track.c segments; regenerate if the track changes",
+   "track_to_px": {
+    "scale": 0.18194274644192848,
+    "centre_m": [
+     98.72868083525391,
+     57.47479065937327
+    ]
+   }
+  },
+  {
+   "name": "glyph_s_0",
+   "group": "font",
+   "file": "font/glyph_s_0.png",
+   "width": 21,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 1575,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_1",
+   "group": "font",
+   "file": "font/glyph_s_1.png",
+   "width": 21,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 1575,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_2",
+   "group": "font",
+   "file": "font/glyph_s_2.png",
+   "width": 21,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 1575,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_3",
+   "group": "font",
+   "file": "font/glyph_s_3.png",
+   "width": 21,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 1575,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_4",
+   "group": "font",
+   "file": "font/glyph_s_4.png",
+   "width": 21,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 1575,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_5",
+   "group": "font",
+   "file": "font/glyph_s_5.png",
+   "width": 21,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 1575,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_6",
+   "group": "font",
+   "file": "font/glyph_s_6.png",
+   "width": 21,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 1575,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_7",
+   "group": "font",
+   "file": "font/glyph_s_7.png",
+   "width": 21,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 1575,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_8",
+   "group": "font",
+   "file": "font/glyph_s_8.png",
+   "width": 21,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 1575,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_9",
+   "group": "font",
+   "file": "font/glyph_s_9.png",
+   "width": 21,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 1575,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_colon",
+   "group": "font",
+   "file": "font/glyph_s_colon.png",
+   "width": 15,
+   "height": 21,
+   "alpha": "smooth",
+   "bytes_rgb565": 945,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_dot",
+   "group": "font",
+   "file": "font/glyph_s_dot.png",
+   "width": 15,
+   "height": 12,
+   "alpha": "smooth",
+   "bytes_rgb565": 540,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_slash",
+   "group": "font",
+   "file": "font/glyph_s_slash.png",
+   "width": 17,
+   "height": 31,
+   "alpha": "smooth",
+   "bytes_rgb565": 1581,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_s_pct",
+   "group": "font",
+   "file": "font/glyph_s_pct.png",
+   "width": 29,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 2175,
+   "reuse": "digit glyph, 22 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_0",
+   "group": "font",
+   "file": "font/glyph_l_0.png",
+   "width": 41,
+   "height": 52,
+   "alpha": "smooth",
+   "bytes_rgb565": 6396,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_1",
+   "group": "font",
+   "file": "font/glyph_l_1.png",
+   "width": 41,
+   "height": 49,
+   "alpha": "smooth",
+   "bytes_rgb565": 6027,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_2",
+   "group": "font",
+   "file": "font/glyph_l_2.png",
+   "width": 41,
+   "height": 51,
+   "alpha": "smooth",
+   "bytes_rgb565": 6273,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_3",
+   "group": "font",
+   "file": "font/glyph_l_3.png",
+   "width": 41,
+   "height": 52,
+   "alpha": "smooth",
+   "bytes_rgb565": 6396,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_4",
+   "group": "font",
+   "file": "font/glyph_l_4.png",
+   "width": 41,
+   "height": 50,
+   "alpha": "smooth",
+   "bytes_rgb565": 6150,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_5",
+   "group": "font",
+   "file": "font/glyph_l_5.png",
+   "width": 41,
+   "height": 50,
+   "alpha": "smooth",
+   "bytes_rgb565": 6150,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_6",
+   "group": "font",
+   "file": "font/glyph_l_6.png",
+   "width": 41,
+   "height": 52,
+   "alpha": "smooth",
+   "bytes_rgb565": 6396,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_7",
+   "group": "font",
+   "file": "font/glyph_l_7.png",
+   "width": 41,
+   "height": 50,
+   "alpha": "smooth",
+   "bytes_rgb565": 6150,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_8",
+   "group": "font",
+   "file": "font/glyph_l_8.png",
+   "width": 41,
+   "height": 52,
+   "alpha": "smooth",
+   "bytes_rgb565": 6396,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_9",
+   "group": "font",
+   "file": "font/glyph_l_9.png",
+   "width": 41,
+   "height": 52,
+   "alpha": "smooth",
+   "bytes_rgb565": 6396,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_colon",
+   "group": "font",
+   "file": "font/glyph_l_colon.png",
+   "width": 26,
+   "height": 40,
+   "alpha": "smooth",
+   "bytes_rgb565": 3120,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_dot",
+   "group": "font",
+   "file": "font/glyph_l_dot.png",
+   "width": 26,
+   "height": 19,
+   "alpha": "smooth",
+   "bytes_rgb565": 1482,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_slash",
+   "group": "font",
+   "file": "font/glyph_l_slash.png",
+   "width": 30,
+   "height": 63,
+   "alpha": "smooth",
+   "bytes_rgb565": 5670,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "glyph_l_pct",
+   "group": "font",
+   "file": "font/glyph_l_pct.png",
+   "width": 62,
+   "height": 52,
+   "alpha": "smooth",
+   "bytes_rgb565": 9672,
+   "reuse": "digit glyph, 56 px; white, tint at runtime"
+  },
+  {
+   "name": "title_cn",
+   "group": "text",
+   "file": "text/title_cn.png",
+   "width": 248,
+   "height": 48,
+   "alpha": "smooth",
+   "bytes_rgb565": 35712,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "哈士奇雪橇赛"
+  },
+  {
+   "name": "title_en",
+   "group": "text",
+   "file": "text/title_en.png",
+   "width": 130,
+   "height": 18,
+   "alpha": "smooth",
+   "bytes_rgb565": 7020,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "HUSKY SLED RACE"
+  },
+  {
+   "name": "tier_breeze",
+   "group": "text",
+   "file": "text/tier_breeze.png",
+   "width": 40,
+   "height": 24,
+   "alpha": "smooth",
+   "bytes_rgb565": 2880,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "微风"
+  },
+  {
+   "name": "tier_snow",
+   "group": "text",
+   "file": "text/tier_snow.png",
+   "width": 40,
+   "height": 23,
+   "alpha": "smooth",
+   "bytes_rgb565": 2760,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "风雪"
+  },
+  {
+   "name": "tier_blizzard",
+   "group": "text",
+   "file": "text/tier_blizzard.png",
+   "width": 56,
+   "height": 23,
+   "alpha": "smooth",
+   "bytes_rgb565": 3864,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "暴风雪"
+  },
+  {
+   "name": "lap",
+   "group": "text",
+   "file": "text/lap.png",
+   "width": 30,
+   "height": 17,
+   "alpha": "smooth",
+   "bytes_rgb565": 1530,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "LAP"
+  },
+  {
+   "name": "final_lap",
+   "group": "text",
+   "file": "text/final_lap.png",
+   "width": 128,
+   "height": 38,
+   "alpha": "smooth",
+   "bytes_rgb565": 14592,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "最后一圈"
+  },
+  {
+   "name": "go",
+   "group": "text",
+   "file": "text/go.png",
+   "width": 127,
+   "height": 58,
+   "alpha": "smooth",
+   "bytes_rgb565": 22098,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "GO!"
+  },
+  {
+   "name": "finish",
+   "group": "text",
+   "file": "text/finish.png",
+   "width": 64,
+   "height": 36,
+   "alpha": "smooth",
+   "bytes_rgb565": 6912,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "完赛"
+  },
+  {
+   "name": "new_record",
+   "group": "text",
+   "file": "text/new_record.png",
+   "width": 62,
+   "height": 28,
+   "alpha": "smooth",
+   "bytes_rgb565": 5208,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "新纪录"
+  },
+  {
+   "name": "score",
+   "group": "text",
+   "file": "text/score.png",
+   "width": 36,
+   "height": 22,
+   "alpha": "smooth",
+   "bytes_rgb565": 2376,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "分数"
+  },
+  {
+   "name": "total_time",
+   "group": "text",
+   "file": "text/total_time.png",
+   "width": 56,
+   "height": 24,
+   "alpha": "smooth",
+   "bytes_rgb565": 4032,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "总时间"
+  },
+  {
+   "name": "best_lap",
+   "group": "text",
+   "file": "text/best_lap.png",
+   "width": 72,
+   "height": 24,
+   "alpha": "smooth",
+   "bytes_rgb565": 5184,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "最佳圈速"
+  },
+  {
+   "name": "max_heat",
+   "group": "text",
+   "file": "text/max_heat.png",
+   "width": 72,
+   "height": 25,
+   "alpha": "smooth",
+   "bytes_rgb565": 5400,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "最高热情"
+  },
+  {
+   "name": "paused",
+   "group": "text",
+   "file": "text/paused.png",
+   "width": 60,
+   "height": 34,
+   "alpha": "smooth",
+   "bytes_rgb565": 6120,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "暂停"
+  },
+  {
+   "name": "mode_tilt",
+   "group": "text",
+   "file": "text/mode_tilt.png",
+   "width": 48,
+   "height": 28,
+   "alpha": "smooth",
+   "bytes_rgb565": 4032,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "体感"
+  },
+  {
+   "name": "mode_keys",
+   "group": "text",
+   "file": "text/mode_keys.png",
+   "width": 48,
+   "height": 29,
+   "alpha": "smooth",
+   "bytes_rgb565": 4176,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "按键"
+  },
+  {
+   "name": "mode_tilt_sub",
+   "group": "text",
+   "file": "text/mode_tilt_sub.png",
+   "width": 56,
+   "height": 21,
+   "alpha": "smooth",
+   "bytes_rgb565": 3528,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "倾斜转向"
+  },
+  {
+   "name": "mode_keys_sub",
+   "group": "text",
+   "file": "text/mode_keys_sub.png",
+   "width": 68,
+   "height": 21,
+   "alpha": "smooth",
+   "bytes_rgb565": 4284,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "左右键转向"
+  },
+  {
+   "name": "hint_start",
+   "group": "text",
+   "file": "text/hint_start.png",
+   "width": 118,
+   "height": 22,
+   "alpha": "smooth",
+   "bytes_rgb565": 7788,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "左键切换  右键出发"
+  },
+  {
+   "name": "hint_retry",
+   "group": "text",
+   "file": "text/hint_retry.png",
+   "width": 95,
+   "height": 23,
+   "alpha": "smooth",
+   "bytes_rgb565": 6555,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "右键 再跑一次"
+  },
+  {
+   "name": "hint_resume",
+   "group": "text",
+   "file": "text/hint_resume.png",
+   "width": 124,
+   "height": 22,
+   "alpha": "smooth",
+   "bytes_rgb565": 8184,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "右键 继续  左键 退出"
+  },
+  {
+   "name": "deep_snow",
+   "group": "text",
+   "file": "text/deep_snow.png",
+   "width": 51,
+   "height": 26,
+   "alpha": "smooth",
+   "bytes_rgb565": 3978,
+   "reuse": "white; tint at runtime (amber for highlights)",
+   "text": "深雪!"
+  },
+  {
+   "name": "icon_snowflake",
+   "group": "ui",
+   "file": "ui/icon_snowflake.png",
+   "width": 18,
+   "height": 18,
+   "alpha": "smooth",
+   "bytes_rgb565": 972,
+   "reuse": "heat tier pips x3; tint dim/lit"
+  },
+  {
+   "name": "icon_tilt",
+   "group": "ui",
+   "file": "ui/icon_tilt.png",
+   "width": 36,
+   "height": 36,
+   "alpha": "smooth",
+   "bytes_rgb565": 3888,
+   "reuse": "mode card"
+  },
+  {
+   "name": "icon_keys",
+   "group": "ui",
+   "file": "ui/icon_keys.png",
+   "width": 36,
+   "height": 36,
+   "alpha": "smooth",
+   "bytes_rgb565": 3888,
+   "reuse": "mode card"
+  },
+  {
+   "name": "heat_gradient",
+   "group": "ui",
+   "file": "ui/heat_gradient.png",
+   "width": 8,
+   "height": 96,
+   "alpha": "opaque",
+   "bytes_rgb565": 1536,
+   "reuse": "heat colour ramp (cold blue > amber > hot pink); sample a row or clip-stretch as a bar"
+  }
+ ]
+}

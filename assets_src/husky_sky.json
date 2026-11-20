@@ -1,0 +1,15 @@
+{
+ "image": "husky_sky_source.png",
+ "columns": 2,
+ "rows": 1,
+ "output_cell": 240,
+ "alpha_mode": "opaque",
+ "frames": [
+  {
+   "name": "sky_l"
+  },
+  {
+   "name": "sky_r"
+  }
+ ]
+}

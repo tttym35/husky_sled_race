@@ -1,0 +1,14 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "file": "husky_run_sheet.png",
+      "prompt": "Use case: photorealistic-natural. Production asset: 8-frame running animation sprite sheet of ONE Siberian husky viewed strictly from behind, based on the attached realistic six-dog asset's fur, red harness, blue-hour lighting. EXACT layout: 4 columns by 2 rows, 8 evenly sized cells, each entire dog centered within its own cell with generous transparent margin. Transparent alpha background throughout. Each cell depicts the SAME grey/cream adult husky with identical markings, red pulling harness, upright ears, fluffy tail curving slightly to one side, always looking straight away from camera, never turning head or looking back. Camera low behind dog at sled rider height. Eight sequential biomechanically plausible running gait phases: rear legs extending pushing off, lifting, tucking under, reaching forward, planting; front legs visible naturally and alternating. Body has subtle up/down motion while keeping same body scale and registration across cells. All 4 feet remain within cell; no cropped paws; natural canine anatomy. Photographic natural fur detail, joyful energetic running. No ground, snow, backdrop, text, numbers, borders, grid lines, shadows, or trailing ropes between cells. This is a coherent animation contact sheet for frame extraction, not eight different dogs. Wide landscape sheet aspect 2:1, each cell portrait 1:2. Preserve rear view and natural unexaggerated tail size."
+    },
+    {
+      "file": "scenery_sheet.png",
+      "prompt": "Photorealistic transparent game asset sheet, EXACT 2 by 2 evenly sized cells with wide clear transparent gutters, no text or grid. Match real blue-hour snowy birch forest in the reference: cool lavender snow, subtle warm amber light. Top left: one complete tall slender snow-frosted birch tree with fine branches, trunk and snowy foot fully inside cell. Top right: a small cluster of two slender frosted deciduous trees, different branching silhouettes, fully contained. Bottom left: one complete elegant narrow black winter trail lamp pole, warm amber glowing lantern and cap of snow, snow at its foot; whole pole visible. Bottom right: first-person sled cockpit foreground, a gracefully curved light-brown wooden sled handle arch seen from behind, some powder snow on wood, two dark rope supports trailing downward, no hands, no dogs; handle spans that cell's width with transparent space above and below. All four cutouts genuinely transparent alpha, natural photographic materials, no background landscape, no floor rectangle, no UI, no labels, no cartoon. Each subject independent for extraction; all edges inside their cell. Square high resolution."
+    }
+  ],
+  "reference": "User-supplied video frames and approved generated artwork; raw reference remains review-only."
+}

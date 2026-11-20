@@ -1,0 +1,21 @@
+{
+ "image": "husky_large_source.png",
+ "columns": 2,
+ "rows": 2,
+ "output_cell": 260,
+ "alpha_mode": "binary",
+ "frames": [
+  {
+   "name": "treeline_birch"
+  },
+  {
+   "name": "treeline_lamp"
+  },
+  {
+   "name": "team_run"
+  },
+  {
+   "name": "team_lookback"
+  }
+ ]
+}

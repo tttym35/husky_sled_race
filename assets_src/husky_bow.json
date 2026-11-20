@@ -1,0 +1,24 @@
+{
+ "image": "husky_bow_source.png",
+ "columns": 5,
+ "rows": 1,
+ "output_cell": 90,
+ "alpha_mode": "binary",
+ "frames": [
+  {
+   "name": "bow_0"
+  },
+  {
+   "name": "bow_1"
+  },
+  {
+   "name": "bow_2"
+  },
+  {
+   "name": "bow_3"
+  },
+  {
+   "name": "bow_4"
+  }
+ ]
+}
