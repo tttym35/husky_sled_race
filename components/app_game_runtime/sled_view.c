@@ -109,6 +109,12 @@ int sled_view_init(sled_view_t *view)
         view->dogs[i] = sled_asset(name);
         ok = view->dogs[i] != NULL;
     }
+    for (int i = 0; ok && i < SLED_IDLE_FRAMES; ++i) {
+        char name[16];
+        snprintf(name, sizeof(name), "idle_%d", i);
+        view->idle[i] = sled_asset(name);
+        ok = view->idle[i] != NULL;
+    }
     if (!ok) {
         return -1;
     }
@@ -480,7 +486,7 @@ static void rope(uint16_t *pixels, size_t stride, const sled_image_t *tex,
 static void dog_team(sled_view_t *view, uint16_t *pixels, size_t stride,
                      const app_game_snapshot_t *state)
 {
-    enum { RING_Y = 398, TOWLINE_Y = 470 };
+    enum { RING_Y = 398, TOWLINE_Y = 455 };
     float time = state->gait / 30.0f;
     float ring_x = road_center(RING_Y, state->turn);
     for (int pair = 0; pair < 3; ++pair) {
@@ -505,7 +511,15 @@ static void dog_team(sled_view_t *view, uint16_t *pixels, size_t stride,
         }
         for (int side = 0; side < 2; ++side) {
             int dog = pair * 2 + side;
-            int frame = state->speed < 0.01f ? 7 : ((int)(state->gait / GAIT_TICKS) + dog * 3) % GAIT_FRAMES;
+            int frame = ((int)(state->gait / GAIT_TICKS) + dog * 3) % GAIT_FRAMES;
+            const sled_image_t *dog_image = view->dogs[frame];
+            if (state->state == APP_GAME_STATE_STOP && state->speed <= 0.001f) {
+                /* Tail wag exists only at rest: 7 real frames ping-pong at
+                 * 15 fps, phase-shifted per dog so the team stays lively
+                 * without moving in unison. */
+                static const int wag_sequence[12] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1};
+                dog_image = view->idle[wag_sequence[((state->idle_tick / 2) + dog * 2) % 12]];
+            }
             int bob = (int)(sinf(time * 11.8f + dog * 1.3f) * (1.1f + pair * 0.4f) * state->speed);
             int center = road + (side ? gap : -gap);
             int y = bottom - h + bob;
@@ -515,7 +529,8 @@ static void dog_team(sled_view_t *view, uint16_t *pixels, size_t stride,
             float harness_x = center + (side ? -w : w) * 0.18f;
             rope(pixels, stride, view->rope_red, joint_x, joint_y, harness_x, y + h * 0.36f,
                  line_w * 0.8f);
-            sprite(view, pixels, stride, view->dogs[frame], center - w / 2, y, w, h, side == 1, 255, 0);
+            int sprite_w = h * dog_image->width / dog_image->height;
+            sprite(view, pixels, stride, dog_image, center - sprite_w / 2, y, sprite_w, h, side == 1, 255, 0);
         }
         if (pair < 2) {
             int joint = (int)(line_w * 3.0f);
@@ -526,6 +541,163 @@ static void dog_team(sled_view_t *view, uint16_t *pixels, size_t stride,
     }
     rope(pixels, stride, view->rope_blue, ring_x, RING_Y + 6, VIEW_SIZE / 2, TOWLINE_Y, 11);
     sprite(view, pixels, stride, view->rope_ring, (int)ring_x - 13, RING_Y - 14, 26, 26, false, 255, 0);
+}
+
+/* Unsigned distance from point (px, py) to line segment (ax, ay)-(bx, by). */
+static float sd_segment(float px, float py, float ax, float ay, float bx, float by)
+{
+    float pax = px - ax, pay = py - ay;
+    float bax = bx - ax, bay = by - ay;
+    float denom = bax * bax + bay * bay;
+    float h = denom > 0.0f ? (pax * bax + pay * bay) / denom : 0.0f;
+    if (h < 0.0f) {
+        h = 0.0f;
+    } else if (h > 1.0f) {
+        h = 1.0f;
+    }
+    float dx = pax - bax * h;
+    float dy = pay - bay * h;
+    return sqrtf(dx * dx + dy * dy);
+}
+
+/* Pure white translucent double-chevron icon on the 480x480 circular safe ring.
+ * A subtle cool-navy outer halo keeps the white strokes legible over bright snow. */
+static void draw_direction_icon(uint16_t *pixels, size_t stride,
+                                app_game_dir_t dir, unsigned opacity, float shift)
+{
+    if (dir == APP_GAME_DIR_NONE || opacity < 8) {
+        return;
+    }
+    static const uint16_t ICON_WHITE = 0xffff;
+    static const uint16_t ICON_HALO = 0x10a4;
+    const float half_w = 2.6f;
+    const float aa = 1.2f;
+    const float halo_w = 4.5f;
+    const int radius = 24;
+
+    float cx = 240.0f, cy = 240.0f;
+    float fx = 0.0f, fy = 0.0f;
+    switch (dir) {
+    case APP_GAME_DIR_UP:
+        cx = 240.0f;
+        cy = 64.0f - shift;
+        fy = -1.0f;
+        break;
+    case APP_GAME_DIR_DOWN:
+        cx = 240.0f;
+        cy = 416.0f + shift;
+        fy = 1.0f;
+        break;
+    case APP_GAME_DIR_LEFT:
+        cx = 64.0f - shift;
+        cy = 240.0f;
+        fx = -1.0f;
+        break;
+    case APP_GAME_DIR_RIGHT:
+        cx = 416.0f + shift;
+        cy = 240.0f;
+        fx = 1.0f;
+        break;
+    default:
+        return;
+    }
+
+    int x0 = clamp((int)(cx - radius), 0, VIEW_SIZE);
+    int x1 = clamp((int)(cx + radius + 1), 0, VIEW_SIZE);
+    int y0 = clamp((int)(cy - radius), 0, VIEW_SIZE);
+    int y1 = clamp((int)(cy + radius + 1), 0, VIEW_SIZE);
+
+    for (int y = y0; y < y1; ++y) {
+        uint16_t *row = pixels + (size_t)y * stride;
+        float dy = y + 0.5f - cy;
+        for (int x = x0; x < x1; ++x) {
+            float dx = x + 0.5f - cx;
+            float u = dx * fx + dy * fy;
+            float v = fabsf(-dx * fy + dy * fx);
+
+            /* Lead chevron (brighter) and trailing chevron (softer swipe cue). */
+            float d_lead = sd_segment(u, v, 12.0f, 0.0f, -1.0f, 13.0f);
+            float d_tail = sd_segment(u, v, -1.0f, 0.0f, -12.0f, 11.0f);
+            float d_min = d_lead < d_tail ? d_lead : d_tail;
+            if (d_min > half_w + halo_w) {
+                continue;
+            }
+
+            float cov_lead = 0.5f + (half_w - d_lead) / aa;
+            if (cov_lead < 0.0f) {
+                cov_lead = 0.0f;
+            } else if (cov_lead > 1.0f) {
+                cov_lead = 1.0f;
+            }
+            float cov_tail = 0.5f + (half_w - d_tail) / aa;
+            if (cov_tail < 0.0f) {
+                cov_tail = 0.0f;
+            } else if (cov_tail > 1.0f) {
+                cov_tail = 1.0f;
+            }
+            float cov = cov_lead > cov_tail * 0.65f ? cov_lead : cov_tail * 0.65f;
+
+            float halo_t = 1.0f - (d_min - half_w) / halo_w;
+            if (halo_t > 0.0f) {
+                if (halo_t > 1.0f) {
+                    halo_t = 1.0f;
+                }
+                unsigned halo_a = (unsigned)(opacity * 0.28f * halo_t * halo_t);
+                if (halo_a >= 8) {
+                    row[x] = blend(row[x], ICON_HALO, halo_a);
+                }
+            }
+            unsigned white_a = (unsigned)(opacity * cov);
+            if (white_a >= 8) {
+                row[x] = blend(row[x], ICON_WHITE, white_a);
+            }
+        }
+    }
+}
+
+static void hint_pulse_params(uint32_t hint_tick, unsigned *out_alpha, float *out_shift)
+{
+    uint32_t local = hint_tick % APP_GAME_INTRO_PULSE_TICKS;
+    float phase = (float)local / (float)APP_GAME_INTRO_PULSE_TICKS;
+    float pulse = sinf(3.14159265f * phase);
+    *out_alpha = (unsigned)(pulse * 195.0f);
+    *out_shift = (pulse - 0.3f) * 5.0f;
+}
+
+static void draw_touch_hints(uint16_t *pixels, size_t stride, const app_game_snapshot_t *state)
+{
+    if (state->intro_hint_active) {
+        unsigned alpha = 0;
+        float shift = 0.0f;
+        hint_pulse_params(state->intro_hint_tick, &alpha, &shift);
+        draw_direction_icon(pixels, stride, APP_GAME_DIR_LEFT, alpha, shift);
+        draw_direction_icon(pixels, stride, APP_GAME_DIR_RIGHT, alpha, shift);
+        draw_direction_icon(pixels, stride, APP_GAME_DIR_DOWN, alpha, shift);
+    }
+
+    if (state->up_hint_active) {
+        unsigned alpha = 0;
+        float shift = 0.0f;
+        hint_pulse_params(state->up_hint_tick, &alpha, &shift);
+        draw_direction_icon(pixels, stride, APP_GAME_DIR_UP, alpha, shift);
+    }
+
+    if (state->feedback_dir != APP_GAME_DIR_NONE && state->feedback_remaining > 0) {
+        uint32_t elapsed = APP_GAME_FEEDBACK_TICKS - state->feedback_remaining;
+        float env;
+        if (elapsed <= 1) {
+            env = 0.75f;
+        } else if (elapsed == 2) {
+            env = 1.0f;
+        } else {
+            float rem = 1.0f - (float)(elapsed - 2) / (float)(APP_GAME_FEEDBACK_TICKS - 2);
+            env = rem > 0.0f ? rem * rem : 0.0f;
+        }
+        float t = (float)elapsed / (float)APP_GAME_FEEDBACK_TICKS;
+        float shift = -4.0f + 10.0f * (1.0f - (1.0f - t) * (1.0f - t));
+        unsigned alpha = (unsigned)(env * 235.0f);
+        draw_direction_icon(pixels, stride, state->feedback_dir, alpha, shift);
+    }
 }
 
 int sled_view_render(sled_view_t *view, const app_game_snapshot_t *state)
@@ -546,9 +718,12 @@ int sled_view_render(sled_view_t *view, const app_game_snapshot_t *state)
     int bob = (int)(sinf(state->gait / 30.0f * 11.8f) * 1.5f * state->speed);
     sprite(view, pixels, stride, view->sled, -5, 443 + bob, 490, 155, false, 255, 0);
     uint32_t t4 = NOW_US();
+    draw_touch_hints(pixels, stride, state);
+    uint32_t t5 = NOW_US();
     view->layer_us[SLED_LAYER_GROUND] = t1 - t0;
     view->layer_us[SLED_LAYER_PROPS] = t2 - t1;
     view->layer_us[SLED_LAYER_TEAM] = t3 - t2;
     view->layer_us[SLED_LAYER_SLED] = t4 - t3;
+    view->layer_us[SLED_LAYER_HUD] = t5 - t4;
     return 0;
 }

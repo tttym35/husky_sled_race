@@ -4,8 +4,15 @@
 #include "sled_assets.h"
 #include "../../app_game/include/app_game.h"
 
-enum { SLED_POWDER_CAPACITY = 256, SLED_PROP_CAPACITY = 320 };
-enum { SLED_LAYER_GROUND, SLED_LAYER_PROPS, SLED_LAYER_TEAM, SLED_LAYER_SLED, SLED_LAYER_COUNT };
+enum { SLED_POWDER_CAPACITY = 256, SLED_PROP_CAPACITY = 320, SLED_IDLE_FRAMES = 7 };
+enum {
+    SLED_LAYER_GROUND,
+    SLED_LAYER_PROPS,
+    SLED_LAYER_TEAM,
+    SLED_LAYER_SLED,
+    SLED_LAYER_HUD,
+    SLED_LAYER_COUNT,
+};
 typedef struct {
     float x, y, vx, vy, age, life, radius;
     uint8_t kind, pair;
@@ -18,7 +25,7 @@ typedef struct {
 } sled_prop_t;
 /* Per-renderer scratch and fixed particle pool. Owning loop only. */
 typedef struct {
-    const sled_image_t *forest, *snow, *dogs[8], *lamp, *sled;
+    const sled_image_t *forest, *snow, *dogs[8], *idle[SLED_IDLE_FRAMES], *lamp, *sled;
     const sled_image_t *birch_mip[3], *trees_mip[3], *far_forest; /* full, 1/2, 1/4 */
     const sled_image_t *rope_red, *rope_blue, *rope_joint, *rope_ring;
     uint16_t fog;

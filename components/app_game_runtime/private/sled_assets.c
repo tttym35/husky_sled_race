@@ -12,6 +12,13 @@
 #include "generated/sled_run_5.inc"
 #include "generated/sled_run_6.inc"
 #include "generated/sled_run_7.inc"
+#include "generated/sled_idle_0.inc"
+#include "generated/sled_idle_1.inc"
+#include "generated/sled_idle_2.inc"
+#include "generated/sled_idle_3.inc"
+#include "generated/sled_idle_4.inc"
+#include "generated/sled_idle_5.inc"
+#include "generated/sled_idle_6.inc"
 #include "generated/sled_birch.inc"
 #include "generated/sled_trees.inc"
 #include "generated/sled_lamp.inc"
@@ -59,6 +66,27 @@ const sled_image_t *sled_asset(const char *name)
     }
     if (strcmp(name, "run_7") == 0) {
         return &run_7;
+    }
+    if (strcmp(name, "idle_0") == 0) {
+        return &idle_0;
+    }
+    if (strcmp(name, "idle_1") == 0) {
+        return &idle_1;
+    }
+    if (strcmp(name, "idle_2") == 0) {
+        return &idle_2;
+    }
+    if (strcmp(name, "idle_3") == 0) {
+        return &idle_3;
+    }
+    if (strcmp(name, "idle_4") == 0) {
+        return &idle_4;
+    }
+    if (strcmp(name, "idle_5") == 0) {
+        return &idle_5;
+    }
+    if (strcmp(name, "idle_6") == 0) {
+        return &idle_6;
     }
     if (strcmp(name, "birch") == 0) {
         return &birch;

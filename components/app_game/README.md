@@ -31,13 +31,29 @@ reads snapshots and must not reach into the private struct. Test game rules with
 a native C compiler without firmware or graphics dependencies.
 
 
-At 30 Hz, the model cycles through five 180-tick stages: straight, left, right,
-straight return, stopped. A 45-tick smoothstep controls turn changes, start and
-braking. Distance and gait integrate speed and freeze while stopped. Bounded
-accumulators wrap at 1680 world units (a multiple of roadside spacing/pattern) and 480 gait ticks. `cycle_tick` advances independently
-of wrapping `tick`. Snapshot fields expose stage, speed, curvature and travel to
-the renderer and Host diagnostics. Pause freezes all model updates.
+At 30 Hz, the model runs a touch-driven four-state machine with two steady states
+(`APP_GAME_STATE_STOP`, `APP_GAME_STATE_STRAIGHT`) and two temporary turning states
+(`APP_GAME_STATE_LEFT`, `APP_GAME_STATE_RIGHT`):
 
-`app_game_set_control()` is the reserved entry point for the interactive version:
-it stores steer (-1..1), brake and jump in the snapshot. The autonomous cycle does
-not read it yet; adapters for sub-board keys and IMU will call it.
+- Boot / reset starts in `STRAIGHT` at full speed (`speed = 1.0`) and activates
+  a 3-pulse boot hint (`intro_hint_active` for 72 ticks, 24 ticks per pulse).
+- `STRAIGHT`: swipe left -> `LEFT` (90 ticks / 3 s), swipe right -> `RIGHT`
+  (90 ticks / 3 s), swipe down -> smooth brake to `STOP`.
+- `LEFT`: expires after 90 ticks or cancels immediately on swipe right -> smooth
+  return to `STRAIGHT`; swipe down is ignored.
+- `RIGHT`: expires after 90 ticks or cancels immediately on swipe left -> smooth
+  return to `STRAIGHT`; swipe down is ignored.
+- `STOP`: swipe up or double-tap -> smooth accelerate to `STRAIGHT`; swipe left
+  or right stays in `STOP` and pulses the top up-arrow hint 3 times (`up_hint_active`
+  for 72 ticks) to cue swiping up; swipe down is ignored. Once fully stopped
+  (`speed == 0`), `idle_tick` increments to drive the stationary tail-wag cycle.
+
+Every accepted touch gesture dismisses any active boot hint and starts a 16-tick
+direction feedback flash (`feedback_dir`, `feedback_remaining`). Distance and gait
+integrate speed and freeze while stopped; bounded accumulators wrap at 1680 world
+units and 480 gait ticks. Pause freezes ticks and gesture execution.
+
+`app_game_pointer_event()` accepts tracked pointer/touch input (clamped to viewport)
+and classifies swipes (>= 44 px) and double-taps (<= 28 px move, <= 12 ticks hold,
+<= 15 ticks gap). `app_game_set_pointer()` forwards track 0. `app_game_set_control()`
+remains reserved for external sub-board keys and IMU integration.
